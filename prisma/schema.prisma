@@ -9,3 +9,58 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+// create models that will be used to store the data from our site
+
+// Product model that stores all our products
+model Product {
+  id                     String   @id @default(uuid())
+  name                   String
+  price                  Int
+  filePath               String
+  imagePath              String
+  description            String
+  isAvailableForPurchase Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  orders Order[] // connects orders to the products being ordered
+  downloadVerifications DownloadVerification[] // connects the product to its verification on our system
+}
+
+// User model that stores all the users that use our site
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user Order[] // connects the user/client to the order they have made for a purchase
+}
+
+// model for all the orders that will be made on our site
+model Order {
+  id        String   @id @default(uuid())
+  pricePaid Int
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userID    String
+  productID String
+
+  // create relation that connect the order to the user
+  user    User    @relation(fields: [userID], references: [id], onDelete: Cascade)
+  
+  // relation that connects the product purchased to the user who has bought it
+  product Product @relation(fields: [productID], references: [id], onDelete: Restrict)
+}
+
+// non essential model but useful for security - a means to verify each users product uploaded to our system
+model DownloadVerification {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  createAt  DateTime @default(now())
+  productID String
+
+  // create relation of the product we want to verify to it id number
+  product Product @relation(fields: [productID], references: [id], onDelete: Cascade)
+}
