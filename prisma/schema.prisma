@@ -29,13 +29,13 @@ model Product {
 }
 
 // User model that stores all the users that use our site
-model User {
+model Customer {
   id        String   @id @default(uuid())
   email     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user Order[] // connects the user/client to the order they have made for a purchase
+  customer Order[] // connects the user/client to the order they have made for a purchase
 }
 
 // model for all the orders that will be made on our site
@@ -44,11 +44,11 @@ model Order {
   pricePaid Int
   createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userID    String
+  customerID    String
   productID String
 
-  // create relation that connect the order to the user
-  user    User    @relation(fields: [userID], references: [id], onDelete: Cascade)
+  // create relation that connect the order to the customer who order it
+  customer    Customer    @relation(fields: [customerID], references: [id], onDelete: Cascade)
   
   // relation that connects the product purchased to the user who has bought it
   product Product @relation(fields: [productID], references: [id], onDelete: Restrict)
