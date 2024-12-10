@@ -5,20 +5,27 @@ boiler plate for all the pages associated with my website
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import db from "@/db/db";
 import { formatCurrency, formatNumber } from "@/lib/formaters";
+// import { resolve } from "path";
 
-// function executes connectio to database so we can draw sales data
+// function executes connection to database so we can draw sales data
 async function getSalesData() {
     const mySalesData = await db.order.aggregate({
         _sum: { pricePaid: true},
         _count: true
     })
+    await waitLoading(2000)
     return {
         amount: (mySalesData._sum.pricePaid || 0) / 100,
         numberofSales: mySalesData._count
     }
 }
 
-// function executes connectio to database so we can draw user data
+// load spinner function for effect when page is reloading
+function waitLoading(duration: number) {
+    return new Promise(resolve => setTimeout(resolve, duration))
+}
+
+// function executes connection to database so we can draw user data
 async function getCustomerData() {
     const [ userCount, orderData ] = await Promise.all([
         db.customer.count(),
@@ -33,11 +40,23 @@ async function getCustomerData() {
     }
 }
 
+// function allows for connect to database to display the products data
+async function getProductData() {
+    const [ activeProduct, inActiveProduct ] = await Promise.all([
+        db.product.count({ where: {isAvailableForPurchase: true} }),
+        db.product.count({ where: { isAvailableForPurchase: false }})
+    ])
+
+    return { activeProduct, inActiveProduct }
+
+}
+
 // function that displays the home page 'icons/cards'
 export default async function AdminHomePage() {
-    const [ SalesData, UserData ] = await Promise.all([
+    const [ SalesData, UserData, ProductData ] = await Promise.all([
         getSalesData(),
-        getCustomerData()
+        getCustomerData(),
+        getProductData()
     ])
 
     return (
@@ -49,9 +68,15 @@ export default async function AdminHomePage() {
             </Homecard>
 
             <Homecard 
-            title="Customer" 
+            title="Customers" 
             subtitle={`${formatCurrency(UserData.averageValuePerCustomer)} Average Value`}
             body={formatNumber(UserData.userCount)}
+            />
+
+            <Homecard 
+            title="Active Products" 
+            subtitle={`${formatNumber(ProductData.inActiveProduct)} Inactive Products`}
+            body={formatNumber(ProductData.activeProduct)}
             />
         </div>
     )

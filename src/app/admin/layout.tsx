@@ -5,6 +5,8 @@ home page
 
 import { Nav, NavLink } from "./components/Nav";
 
+// restrict the caching of admin activity
+export const dynamic = "force-dynamic"
 
 /*
  use children attribute to create navigation bar
