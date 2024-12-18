@@ -1,7 +1,16 @@
+/* 
+page layout of the products page of our website
+*/
+
+
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "../_components/PageHeader";
 import Link from "next/link";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import db from "@/db/db";
+import { CheckCircle2, MoreVertical, XCircle } from "lucide-react";
+import { formatCurrency, formatNumber } from "@/lib/formaters";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export default function HomeProductsPage() {
     return <>
@@ -15,7 +24,23 @@ export default function HomeProductsPage() {
     </>
 }
 
-function ProductsTable() {
+// renders the tables and items uploaded by the admin
+async function ProductsTable() {
+
+    // we have specified how we want the data to be displayed
+    const products = await db.product.findMany({
+        select: {
+            id: true,
+            name: true,
+            price: true,
+            isAvailableForPurchase: true,
+            _count: { select: { orders: true}}
+        },
+        orderBy: { name: "asc"}
+    })
+
+    if (products.length === 0) return <p>Sorry, no products have been uploaded</p>
+    
     return (
     <Table>
         <TableHeader>
@@ -33,8 +58,46 @@ function ProductsTable() {
             </TableRow>
         </TableHeader>
         <TableBody>
-
-
+            {products.map(product => (
+                <TableRow key={product.id}>
+                    <TableCell>
+                        {product.isAvailableForPurchase ? (
+                        <>
+                            <span className="sr-only">Available</span>
+                            <CheckCircle2 />
+                        </>
+                        ) : (
+                        <>
+                            <span className="sr-only">Unavailable</span>
+                            <XCircle />
+                        </>
+                        )}
+                    </TableCell>
+                    <TableCell>{product.name}</TableCell>
+                    <TableCell>{formatCurrency(product.price / 100)}</TableCell>
+                    <TableCell>{formatNumber(product._count.orders)}</TableCell>
+                    <TableCell>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <MoreVertical />
+                                    <span className="sr-only">Actions</span>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem asChild>
+                                        <a download href={`/admin/products/${product.id}/download`}>
+                                        Download
+                                        </a>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link href={`/admin/products/${product.id}/edit`}>
+                                        Edit
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>  
+                            </DropdownMenu>
+                    </TableCell>
+                </TableRow>
+            ))}
         </TableBody>
     </Table>
     )
