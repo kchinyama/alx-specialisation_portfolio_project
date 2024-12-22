@@ -9,6 +9,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import fs from "fs/promises"
 
+
+//function uses a get request to downlaod a product
 export async function GET(
     req: NextRequest, 
     { params: { id } }: { params: { id : string }}
