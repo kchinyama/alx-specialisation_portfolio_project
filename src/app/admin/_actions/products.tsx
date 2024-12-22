@@ -8,7 +8,7 @@ onto the website by the admin
 import db from "@/db/db"
 import { z } from "zod"
 import fs from "fs/promises"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 
 
 // variable to hold the file data inputed
@@ -28,6 +28,7 @@ const AddSchema = z.object({
     image: ImageSchema.refine(file => file.size > 0, "Required")
 })
 
+// function allows for us to add product for sale to our website
 export async function addProduct(prevState: unknown, formData: FormData) {
     const myData = AddSchema.safeParse(Object.fromEntries(formData.entries()))
 
@@ -57,4 +58,75 @@ export async function addProduct(prevState: unknown, formData: FormData) {
     }})
 
     redirect("/admin/products")
+}
+
+// schema for updating file paths and images
+const editSchema = AddSchema.extend({
+    file: FileSchema.optional(),
+    image: ImageSchema.optional()
+})
+
+
+// allows for us to edit/update an already uploaded ppoduct
+export async function updateProduct(id: string, prevState: unknown, formData: FormData) {
+    const myData = editSchema.safeParse(Object.fromEntries(formData.entries()))
+
+    if (myData.success === false) {
+        return myData.error.formErrors.fieldErrors
+    }
+
+    const data = myData.data
+    const product = await db.product.findUnique({ where: { id }})
+
+    if (product == null) return notFound()
+    
+    let filePath = product.filePath
+    if (data.file != null && data.file.size > 0) {
+        await fs.unlink(product.filePath)
+
+        filePath = `products/${crypto.randomUUID()}-${data.file.name}`
+
+        await fs.writeFile(
+            filePath, Buffer.from(await data.file.arrayBuffer()))
+        
+    }
+
+    let imagePath = product.imagePath
+    if (data.image != null && data.image.size > 0) {
+        await fs.unlink(`public${product.imagePath}`)
+        
+        imagePath = `/products/${crypto.randomUUID()}-${data.image.name}`
+
+        await fs.writeFile(`public${imagePath}`, Buffer.from(await data.image.arrayBuffer()))
+    
+    }    
+
+    await db.product.update({
+        where: { id },
+        data: {
+            name: data.name,
+            description: data.description,
+            price: data.priceInCents,
+            filePath,
+            imagePath 
+    }})
+
+    redirect("/admin/products")
+}
+
+// check product availability on our site
+export async function toggleProductAvailability(id: string,
+    isAvailableForPurchase: boolean) {
+    await db.product.update({ where: { id }, data: { isAvailableForPurchase }})        
+}
+
+
+//delete product when we choose
+export async function deleteProuct(id: string) {
+    const product = await db.product.delete( { where : { id }})
+
+    if (product == null) return notFound()
+    
+    await fs.unlink(product.filePath)
+    await fs.unlink(`public${product.imagePath}`)
 }
