@@ -3,11 +3,12 @@ page layout of home page of the customer interface
 */
 
 import { Button } from "@/components/ui/button"
-import { ProductCard } from "@/components/ui/ProductsCard"
+import { ProductCard, ProductCardSkeleton } from "@/components/ui/ProductsCard"
 import db from "@/db/db"
 import { Product } from "@prisma/client"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { Suspense } from "react"
 
 // function to display the most popular uploaded products
 function getMostPopularProducts() {
@@ -47,7 +48,7 @@ type ProductGridSectionProps = {
 /* function to create the grid sections that hold the the 
 1. newest products 2. popular products
 */
-async function ProductGridSection({ productsFetcher, title }:
+function ProductGridSection({ productsFetcher, title }:
     ProductGridSectionProps) {
         return (
         <div className="space-y-4">
@@ -62,11 +63,28 @@ async function ProductGridSection({ productsFetcher, title }:
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {(await productsFetcher()).map(product => (
-                    <ProductCard key={product.id} {...product} />
-                ))}
-                
+                <Suspense fallback={
+                    <>
+                    <ProductCardSkeleton />
+                    <ProductCardSkeleton />
+                    <ProductCardSkeleton />
+                </>
+                }
+                >
+                    <ProductSuspense productsFetcher={productsFetcher} />
+                </Suspense>                
             </div>
         </div>
         )
+    }
+
+    //function that will handle the suspense loading effect
+    async function ProductSuspense({ productsFetcher }: {
+
+        productsFetcher: () => Promise<Product[]>}) 
+        {
+        
+            return (await productsFetcher()).map(product => (
+            <ProductCard key={product.id} {...product} />
+        ))
     }
