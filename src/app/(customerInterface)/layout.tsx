@@ -1,9 +1,10 @@
 /* file that lays out the structure of the 
-home page
+customers home page
 */
 
 
-import { Nav, NavLink } from "./components/Nav";
+// import { Nav, NavLink } from "./components/Nav";
+import { Nav, NavLink } from "../admin/components/Nav";
 
 // restrict the caching of admin activity
 export const dynamic = "force-dynamic"
@@ -13,17 +14,16 @@ export const dynamic = "force-dynamic"
 for the home page
 */
 
-export default function AdminLayout({
+export default function Layout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return <>
     <Nav>
-        <NavLink href="/admin">Admin Home</NavLink>
-        <NavLink href="admin/products">Products</NavLink>
-        <NavLink href="admin/customers">Customers</NavLink>
-        <NavLink href="admin/orders">Orders</NavLink>
+        <NavLink href="/">Home</NavLink>
+        <NavLink href="/products">Products</NavLink>
+        <NavLink href="/orders">My Orders</NavLink>
     </Nav>
     <div className="container my-6">{children}</div>
     </>
