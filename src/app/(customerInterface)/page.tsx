@@ -5,26 +5,28 @@ page layout of home page of the customer interface
 import { Button } from "@/components/ui/button"
 import { ProductCard, ProductCardSkeleton } from "@/components/ui/ProductsCard"
 import db from "@/db/db"
+import { cache } from "@/lib/cache"
 import { Product } from "@prisma/client"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { Suspense } from "react"
 
-// function to display the most popular uploaded products
-function getMostPopularProducts() {
+// variable to display the most popular uploaded products - checking results after each day
+const getMostPopularProducts = cache(() => {
     return db.product.findMany({ 
         where: { isAvailableForPurchase: true },
         orderBy: { orders: { _count: "desc" } },
         take: 6 })
-}
+}, ["/", "getMostPopularProducts"],
+{ revalidate: 60 * 60 * 24})
 
-// function to display the most newly uploaded products
-function getNewestProducts() {
+// variabble to display the most newly uploaded products
+const getNewestProducts = cache(() => {
     return db.product.findMany({ 
         where: { isAvailableForPurchase: true },
         orderBy: { createdAt: "desc"},
         take: 6 })
-}
+}, ["/", "getNewestProducts"])
 
 // displays the home page to the user
 export default function HomePage() {

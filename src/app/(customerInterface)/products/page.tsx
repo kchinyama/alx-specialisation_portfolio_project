@@ -4,14 +4,16 @@ page/file that holds the users products page
 
 import { ProductCard, ProductCardSkeleton } from "@/components/ui/ProductsCard";
 import db from "@/db/db";
+import { cache } from "@/lib/cache";
 import { Suspense } from "react";
 
 // function that stores all the products uploaded to our sit
-function getProducts() {
+const getProducts = cache(() => {
     return db.product.findMany({ where: 
         { isAvailableForPurchase: true }, 
         orderBy: { name: "asc" } })
-}
+}, ["/products", "getProduct"])
+
 
 export default function ProductsPage() {
     return (
