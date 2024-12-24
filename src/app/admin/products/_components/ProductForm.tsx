@@ -19,7 +19,7 @@ export function ProductForm({ product }: { product?: Product | null}) {
 
     const [ error, action ] = useActionState(product == null ? addProduct: 
         updateProduct.bind(null, product.id), {}) // error handling on admin page, switch between adding and updating a product
-    const [ priceInCents, setPriceInCents ] = useState<number | undefined>(product?.price)
+    const [ priceInCents, setPriceInCents ] = useState<number | undefined>(Number(product?.price))
     
     return (
     <form action={action} className="space-y-8">
