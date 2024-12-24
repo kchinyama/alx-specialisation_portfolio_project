@@ -12,29 +12,30 @@ import { CheckoutForm } from "./_components/CheckoutForm"
 const stripe  = new Stripe(
     process.env.STRIPE_SECRET_KEY as string)
 
-export default async function PurchasePage({ 
-    params: { id },
-}: {
-    params: { id: string }
-}) {
-    const product = await db.product.findUnique({
-        where: { id }
-    })
-
-    if (product == null) return notFound()
+    export default async function PurchasePage({ 
+        params,
+    }: {
+        params: { id: string }
+    }) {
+        const { id } = await params;
     
-    // create an intent to make a payment
-    const paymentIntent = await stripe.paymentIntents.create({
-        amount: Number(product.price),
-        currency: "USD",
-        metadata: { productID: product.id }
+        const product = await db.product.findUnique({
+            where: { id }
+        });
+    
+        if (product == null) return notFound();
+        
+        // create an intent to make a payment
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: Number(product.price),
+            currency: "USD",
+            metadata: { productID: product.id }
+        });
+    
+        if (paymentIntent.client_secret == null) {
+            throw new Error("Sorry, failed to create a payment intent");
+        }  
+        
+        return <CheckoutForm product={product} clientSecret={paymentIntent.client_secret} />;
     }
-    )
-
-    if (paymentIntent.client_secret == null) {
-        throw Error("Sorry, failed to create a payment intent")
-    }  
     
-    return <CheckoutForm product={product} 
-        clientSecret={paymentIntent.client_secret}/>
-}
