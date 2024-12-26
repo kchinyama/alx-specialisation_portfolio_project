@@ -47,7 +47,7 @@ export default async function PurchaseSuccessPage({
             <div className="line-clamp-3 text-muted-foreground">{product.description}</div>
             <Button className="mt-4" size="lg" asChild>
                 {isSuccess ? (
-                    <a></a> ) : (
+                    <a href={`/products/download/${await createDownloadVerification(product.id)}`}>Download</a> ) : (
                     <Link href={`/products/${product.id}/purchase`}>Please Try Again</Link>
                     )}
             </Button>
@@ -55,4 +55,16 @@ export default async function PurchaseSuccessPage({
     </div>
 
 </div>
+}
+
+// function will hold the verification of customer to download their purchased product
+async function createDownloadVerification(productID: string) {
+    return (
+        await db.downloadVerification.create({
+        data: {productID, 
+        expiresAt : new Date(Date.now() + 1000 * 60 * 
+        60 * 24),
+        }
+    })
+    ).id
 }
