@@ -1,6 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chilia Store Project
 
-## Getting Started
+An innovative e-commerce platform design to deliver a seamless shopping experience.
 
 First, run the development server:
 
