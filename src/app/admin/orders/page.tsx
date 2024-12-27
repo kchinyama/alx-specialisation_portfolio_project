@@ -11,9 +11,10 @@ import { PageHeader } from "../_components/PageHeader";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import db from "@/db/db";
 import { MoreVertical } from "lucide-react";
-import { formatCurrency, formatNumber } from "@/lib/formaters";
+import { formatCurrency } from "@/lib/formaters";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { DeleteDropdownItem } from "./_components/UserActions";
+import { DeleteDropDownItem } from "./_components/OrderActions";
+// import { DeleteDropdownItem } from "../products/_components/ProductsActions";
 
 
 // function to get all orders
@@ -23,9 +24,9 @@ function getOrders() {
             id: true,
             pricePaid: true,
             product: { select: { name: true} },
-            customer: true,
+            customer: { select: { email: true } }
         },
-        orderBy: { createdAt: "desc"}
+        orderBy: { createdAt: "desc"},
     })
 }
 
@@ -47,9 +48,9 @@ async function OrdersTable() {
     <Table>
         <TableHeader>
             <TableRow>
-                <TableHead>Email </TableHead>
-                <TableHead>Orders</TableHead>
-                <TableHead>Value</TableHead>
+                <TableHead>Product</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Price Paid</TableHead>
                 <TableHead className="w-0">
                     <span className="sr-only">Actions</span>
                 </TableHead>
@@ -71,7 +72,7 @@ async function OrdersTable() {
                                     <span className="sr-only">Actions</span>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    <DeleteDropdownItem id={order.id} />
+                                    <DeleteDropDownItem id={order.id} />
                                 </DropdownMenuContent>  
                             </DropdownMenu>
                     </TableCell>

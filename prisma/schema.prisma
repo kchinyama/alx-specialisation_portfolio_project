@@ -40,7 +40,7 @@ model Customer {
 model Order {
   id         String   @id @default(uuid())
   pricePaid  Int
-  createAt   DateTime @default(now())
+  createdAt   DateTime @default(now())
   updatedAt  DateTime @updatedAt
   customerID String
   productID  String
