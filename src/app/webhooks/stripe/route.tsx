@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
         const charge = event.data.object
         const productID = charge.metadata.productID
         const email = charge.billing_details.email
-        const price = charge.amount
+        const pricePaid = charge.amount
 
         const product = await db.product.findUnique({
             where: { id: productID}
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
         const userFields = {
             email,
-            orders: { create: { productID, price}}
+            orders: { create: { productID, pricePaid}}
         }
 
         const { orders: [order] } = await db.customer.upsert({ 
@@ -44,18 +44,6 @@ export async function POST(req: NextRequest) {
             update: userFields,
             select: { orders: { orderBy: { createdAt: "desc"}, take: 1} }
         })
-
-        // const userFields = {
-        //     email,
-        //     orders: { create: { productID, price }},
-        //     }
-
-        // const { orders: [order], } = await db.customer.upsert({
-        //     where: { email },
-        //     create: userFields,
-        //     update: userFields,
-        //     select: { orders: { orderBy: { createdAt: "desc" }, take: 1}}
-        // })
 
         const downloadVerification = await db.downloadVerification.create({
              data: {

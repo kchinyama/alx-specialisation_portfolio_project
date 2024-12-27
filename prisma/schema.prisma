@@ -23,8 +23,7 @@ model Product {
   isAvailableForPurchase Boolean  @default(true)
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
-
-  orders Order[] // connects orders to the products being ordered
+  orders                Order[] // connects orders to the products being ordered
   downloadVerifications DownloadVerification[] // connects the product to its verification on our system
 }
 
@@ -34,24 +33,19 @@ model Customer {
   email     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  customer Order[] // connects the user/client to the order they have made for a purchase
+  orders    Order[] // connects the user/client to the order they have made for a purchase
 }
 
 // model for all the orders that will be made on our site
 model Order {
-  id        String   @id @default(uuid())
-  pricePaid Int
-  createAt  DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  customerID    String
-  productID String
-
-  // create relation that connect the order to the customer who order it
-  customer    Customer    @relation(fields: [customerID], references: [id], onDelete: Cascade)
-  
-  // relation that connects the product purchased to the user who has bought it
-  product Product @relation(fields: [productID], references: [id], onDelete: Restrict)
+  id         String   @id @default(uuid())
+  pricePaid  Int
+  createAt   DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  customerID String
+  productID  String
+  customer Customer @relation(fields: [customerID], references: [id], onDelete: Cascade) // create relation that connect the order to the customer who order it
+  product Product @relation(fields: [productID], references: [id], onDelete: Restrict) // relation that connects the product purchased to the user who has bought it
 }
 
 // non essential model but useful for security - a means to verify each users product uploaded to our system
@@ -60,7 +54,5 @@ model DownloadVerification {
   expiresAt DateTime
   createAt  DateTime @default(now())
   productID String
-
-  // create relation of the product we want to verify to it id number
-  product Product @relation(fields: [productID], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productID], references: [id], onDelete: Cascade) // create relation of the product we want to verify to it id number
 }

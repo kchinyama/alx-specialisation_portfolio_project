@@ -133,7 +133,7 @@ export async function toggleProductAvailability(id: string,
 
 
 //delete product when we choose
-export async function deleteProuct(id: string) {
+export async function deleteProduct(id: string) {
     const product = await db.product.delete( { where : { id }})
 
     if (product == null) return notFound()
