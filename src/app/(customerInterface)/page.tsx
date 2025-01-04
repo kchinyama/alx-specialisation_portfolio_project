@@ -80,13 +80,17 @@ function ProductGridSection({ productsFetcher, title }:
         )
     }
 
-    //function that will handle the suspense loading effect
-    async function ProductSuspense({ productsFetcher }: {
+    //function that will handle the suspense loading effect.0
+    async function ProductSuspense({ productsFetcher }: { productsFetcher: () => Promise<Product[]> }) {
+    const products = await productsFetcher();
 
-        productsFetcher: () => Promise<Product[]>}) 
-        {
-        
-            return (await productsFetcher()).map(product => (
-            <ProductCard key={product.id} {...product} />
-        ))
-    }
+    // Convert BigInt to String
+    const serializedProducts = products.map(product => ({
+        ...product,
+        price: product.price.toString() // Convert BigInt to string
+    }));
+
+    return serializedProducts.map(product => (
+        <ProductCard key={product.id} {...product} />
+    ));
+}
