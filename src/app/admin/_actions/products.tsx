@@ -13,7 +13,13 @@ import { revalidatePath } from "next/cache"
 
 
 // variable to hold the file data inputed
-const FileSchema = z.instanceof(File, { message: "Required" })
+//const FileSchema = z.instanceof(File, { message: "Required" })
+// Check if the code is running in the browser
+const isBrowser = typeof window !== "undefined" && typeof File !== "undefined";
+
+const FileSchema = isBrowser
+  ? z.instanceof(File, { message: "Required" })
+  : z.any(); // Fallback for server-side
 
 // variable that holds the image data inputed by the admin
 const ImageSchema = FileSchema.refine(
