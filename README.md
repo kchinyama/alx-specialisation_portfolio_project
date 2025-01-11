@@ -2,11 +2,13 @@
 
 An innovative e-commerce platform design to deliver a seamless shopping experience.
 This project leverages cutting-edge web technologies to ensure performance, scalability, and user satisfaction.
---------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------------
 
 ## Overview
 Chilia Store is a full-stack e-commerce application featuring a dynamic interface, modern design, and robust backend support. The platform allows users to browse products, add them to their cart, and securely complete transactions. Built with **Next.js**, **TypeScript**, **Tailwind CSS**, and **ShadCN**, Chilia Store focuses on speed, sclability, and user experience.
----------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------
 
 ## **Project Architecture**
 The application is organized into a modular and scalable structure:
@@ -22,7 +24,7 @@ The application is organized into a modular and scalable structure:
     -- **API Integration**:
       - Integrates with third-party payment **stripe** to enable secure transactions.
 
----------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
 ### 🚀 **Setup Instructions**
 
 Follow these simple steps to launch the development server and start building:
