@@ -26,8 +26,11 @@ The application is organized into a modular and scalable structure:
 
 ---------------------------------------------------------------------------------------------------------------------------------
 ### 🚀 **Setup Instructions**
+**Prerequisites**
+- Node.js (v16 or later)
+- npm, Yarn, or pnpm installed globally
 
-Follow these simple steps to launch the development server and start building:
+**Getting Started**:
 
 1. Clone the repository and navigate to the project directory.  
 2. Run the development server with any of the following commands: 
