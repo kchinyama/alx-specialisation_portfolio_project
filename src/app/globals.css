@@ -70,3 +70,18 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.nav-logo{
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 0.05rem;
+  color: var(--foreground);
+  text-transform: uppercase;
+  position: absolute; /* Position it relative to the navbar */
+  left: 0; /* Align it to the far left */
+  padding-left: 1rem;
+}
+.navbar {
+  background-color: #631845;
+  color:white;
+}

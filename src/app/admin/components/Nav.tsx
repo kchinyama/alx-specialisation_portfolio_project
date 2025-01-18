@@ -12,9 +12,13 @@ import { ComponentProps, ReactNode } from "react";
 
 // styling for the navigation bar
 export function Nav({ children }: { children: ReactNode}) {
-    return <nav className="bg-primary text-primary-foreground
-    flex justify-center px-4">{children}</nav>
-}
+    return <nav className="navbar bg-primary text-primary-foreground
+    flex justify-center px-4">{children}
+    <div className="flex items-center">
+        <Link href="/" className="nav-logo">Chilia Store</Link>
+    </div>
+</nav>
+} 
 
 // function that allows us to add links to the navigation tags
 export function NavLink(props: Omit<ComponentProps<typeof Link>, 
