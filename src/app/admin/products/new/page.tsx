@@ -9,8 +9,10 @@ import { ProductForm } from "../_components/ProductForm"
 export default function NewProductPage() {
     return (
         <>
+            <div className="pl-4">
             <PageHeader>Add Product</PageHeader>
             <ProductForm />
+            </div>
         </>
     )
 }

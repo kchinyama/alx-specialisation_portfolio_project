@@ -60,23 +60,26 @@ export default async function AdminHomePage() {
     ])
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Homecard 
             title="Sales" 
             subtitle={`${formatNumber(SalesData.numberofSales)} Orders`}
-            body={formatCurrency(SalesData.amount)}>
+            body={formatCurrency(SalesData.amount)}
+            titleClass="bg-green-900 text-white p-2 rounded">
             </Homecard>
 
             <Homecard 
             title="Customers" 
             subtitle={`${formatCurrency(UserData.averageValuePerCustomer)} Average Value`}
             body={formatNumber(UserData.userCount)}
+            titleClass="bg-green-900 text-white p-2 rounded"
             />
 
             <Homecard 
             title="Active Products" 
             subtitle={`${formatNumber(ProductData.inActiveProduct)} Inactive Products`}
             body={formatNumber(ProductData.activeProduct)}
+            titleClass="bg-green-900 text-white p-2 rounded"
             />
         </div>
     )
@@ -87,14 +90,15 @@ type HomecardProps = {
     title: string
     subtitle: string
     body: string
+    titleClass?: string
 }
 
 // created home page card that will hold and stylise icons on home page
-function Homecard({ title, subtitle, body }:
+function Homecard({ title, subtitle, body, titleClass }:
 HomecardProps) {
     return <Card>
         <CardHeader>
-            <CardTitle>{title}</CardTitle>
+            <CardTitle className={titleClass}>{title}</CardTitle>
             <CardDescription>{subtitle}</CardDescription>
         </CardHeader>
         <CardContent>

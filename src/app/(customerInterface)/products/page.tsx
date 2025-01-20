@@ -17,7 +17,7 @@ const getProducts = cache(() => {
 
 export default function ProductsPage() {
     return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="pl-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Suspense fallback={
                     <>
                     <ProductCardSkeleton />
@@ -38,6 +38,10 @@ export default function ProductsPage() {
 // function that allows for the looping through all products so they can be displayed
 async function ProductsSuspense() {
     const products = await getProducts()
+
+    if (products.length === 0) {
+        return <h1 className="pl-4">Sorry, no products available for purchase</h1>
+    }
     
     return products.map(product => <ProductCard key={product.id} 
         {...product} />

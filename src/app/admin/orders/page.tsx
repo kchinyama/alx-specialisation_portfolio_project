@@ -34,7 +34,9 @@ function getOrders() {
 export default function OrdersPage() {
     return (
         <>
+        <div className="pl-4">
         <PageHeader>Sales</PageHeader>
+        </div>
         <OrdersTable />
         </>
     )}
@@ -42,7 +44,7 @@ export default function OrdersPage() {
 async function OrdersTable() {
     const orders = await getOrders()
 
-    if (orders.length === 0) return <p>No Sales Available</p>
+    if (orders.length === 0) return <p className="pl-4">No Sales Available</p>
     
     return (
     <Table>

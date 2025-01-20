@@ -45,7 +45,7 @@ export default async function PurchaseSuccessPage({
             </div>
             <h1 className="text-2xl font-bold">{product.name}</h1>
             <div className="line-clamp-3 text-muted-foreground">{product.description}</div>
-            <Button className="mt-4" size="lg" asChild>
+            <Button className="mt-4 bg-orange-800" size="lg" asChild>
                 {isSuccess ? (
                     <a href={`/products/download/${await createDownloadVerification(product.id)}`}>Download</a> ) : (
                     <Link href={`/products/${product.id}/purchase`}>Please Try Again</Link>

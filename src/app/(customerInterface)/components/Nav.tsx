@@ -1,6 +1,6 @@
 /* 
 module that sets the navigation bar on each of our
-web pages
+web pages - for the buyers hub
 */
 
 "use client"
@@ -12,7 +12,7 @@ import { ComponentProps, ReactNode } from "react";
 
 // styling for the navigation bar
 export function Nav({ children }: { children: ReactNode}) {
-    return <nav className="bg-green-900 text-primary-foreground
+    return <nav className="bg-orange-800 text-primary-foreground
     flex justify-center px-4">{children}</nav>
 }
 

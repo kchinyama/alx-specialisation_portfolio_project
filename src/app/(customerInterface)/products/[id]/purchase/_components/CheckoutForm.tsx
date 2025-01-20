@@ -107,7 +107,7 @@ async function handleSubmit(e: FormEvent) {
         </div>
         </CardContent>
         <CardFooter>
-            <Button className="w-full" size="lg" 
+            <Button className="w-full bg-orange-800" size="lg" 
             disabled={stripe == null || elements == null || isLoading}>
                 {isLoading
                 ? "Purchasing..." : `Purchase - ${formatCurrency(Number(price) / 100)}`}

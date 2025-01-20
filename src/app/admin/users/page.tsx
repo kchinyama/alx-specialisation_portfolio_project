@@ -34,7 +34,9 @@ function getCustomers() {
 export default function CustomersPage() {
     return (
         <>
+        <div className="pl-4">
         <PageHeader>Customers</PageHeader>
+        </div>
         <CustomersTable />
         </>
     )}
@@ -42,7 +44,7 @@ export default function CustomersPage() {
 async function CustomersTable() {
     const customers = await getCustomers()
 
-    if (customers.length === 0) return <p>No Customers Found</p>
+    if (customers.length === 0) return <p className="pl-4">No Customers Found</p>
     
     return (
     <Table>

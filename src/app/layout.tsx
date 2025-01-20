@@ -29,6 +29,9 @@ export default function RootLayout({
         className= {`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <footer className="fixed bottom-0 left-0 w-full text-center p-4">
+          © {new Date().getFullYear()} Chilia Store. All rights reserved.
+        </footer>
       </body>
     </html>
   );

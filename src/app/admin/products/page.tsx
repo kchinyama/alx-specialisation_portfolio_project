@@ -15,9 +15,9 @@ import { ActiveToggleDropdownItem, DeleteDropdownItem } from "./_components/Prod
 
 export default function HomeProductsPage() {
     return <>
-    <div className="flex justify-between items-center gap-4">
+    <div className="pl-4 flex justify-between items-center gap-4">
     <PageHeader>Products</PageHeader>
-    <Button asChild>
+    <Button asChild className="bg-green-900">
         <Link href="/admin/products/new">Add Product</Link>
     </Button>
     </div>
@@ -40,7 +40,7 @@ async function ProductsTable() {
         orderBy: { name: "asc"}
     })
 
-    if (products.length === 0) return <p>Sorry, no products have been uploaded</p>
+    if (products.length === 0) return <p className="pl-4">Sorry, no products have been uploaded</p>
     
     return (
     <Table>

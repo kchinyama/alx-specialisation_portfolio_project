@@ -19,7 +19,7 @@ export function ProductForm({ product }: { product?: Product | null}) {
 
     const [ error, action ] = useActionState(product == null ? addProduct: 
         updateProduct.bind(null, product.id), {}) // error handling on admin page, switch between adding and updating a product
-    const [ priceInCents, setPriceInCents ] = useState<number | undefined>(Number(product?.price))
+    const [ priceInCents, setPriceInCents ] = useState<number | string>(product?.price ? Number(product.price) : "")
     
     return (
     <form action={action} className="space-y-8">
@@ -37,10 +37,14 @@ export function ProductForm({ product }: { product?: Product | null}) {
             name="priceInCents" 
             required
             value={priceInCents}
-            onChange={e => setPriceInCents(Number(e.target.value) || undefined)} 
+            onChange={e => setPriceInCents(e.target.value)}
+            onBlur={e => {
+                const value = Number(e.target.value)
+                setPriceInCents(Number.isNaN(value) ? "" : value)
+            }} 
             />
             <div className="text-muted-foreground">
-                {formatCurrency((priceInCents || 0) / 100)}
+                {formatCurrency((Number(priceInCents) || 0) / 100)}
             </div>
             {error.priceInCents && <div className="text-destructive">{error.priceInCents}</div>}
         </div> 
@@ -78,7 +82,7 @@ export function ProductForm({ product }: { product?: Product | null}) {
 function SubmitButton() {
     const { pending } = useFormStatus()
     return (
-        <Button type="submit" disabled={pending}>
+        <Button className="bg-green-900" type="submit" disabled={pending}>
         {pending ? "Saving Item..." : "Save"}
         </Button>
     )
